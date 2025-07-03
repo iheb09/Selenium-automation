@@ -1,4 +1,4 @@
-package com.example;
+package GestionGroupes.Tests;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
@@ -13,8 +13,17 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Properties;
 
-public class TestModRappGrp {
+public class TestBilSandreGrp {
+
+
+    private Properties loadCredentials() throws Exception {
+        Properties props = new Properties();
+        props.load(getClass().getClassLoader().getResourceAsStream("credentials.properties"));
+        return props;
+    }
+
 
     private String timestamp() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -26,7 +35,7 @@ public class TestModRappGrp {
     }
 
     @Test
-    public void runTestModRappGrp() throws Exception {
+    public void runTestBilSandreGrp() throws Exception {
         WebDriver driver = null;
 
         try {
@@ -36,16 +45,23 @@ public class TestModRappGrp {
 
             driver = new RemoteWebDriver(new URL("http://localhost:4444"), options);
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+            System.out.println("Running Test bilan sandre grp");
+
 
             driver.get("https://dev.aquedi.fr/connexion");
 
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("iLogin"))).sendKeys("usr_stag");
-            driver.findElement(By.id("iPassword")).sendKeys("aquedi");
+            Properties creds = loadCredentials();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("iLogin")))
+                    .sendKeys(creds.getProperty("username"));
+            driver.findElement(By.id("iPassword"))
+                    .sendKeys(creds.getProperty("password"));
             driver.findElement(By.id("btnConnexion")).click();
+
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Tableau de bord']")));
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[.//span[text()='Fermer']]"))).click();
+
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//div[contains(@class,'btnDashboard') and .//label[text()='Référentiel']]"))).click();
 
@@ -57,9 +73,9 @@ public class TestModRappGrp {
             takeScreenshot(driver, "after_accessing_page");
 
             // WAIT FOR THE 'Groupes de modèles de rapport' TAB LINK TO BE CLICKABLE AND CLICK IT
-            WebElement groupeModelesTab = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.id("modele-rapport-tab")));
-            groupeModelesTab.click();
+            WebElement groupeBilanTab = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.id("bilan-sandre-tab")));
+            groupeBilanTab.click();
 
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[text()='Ajouter un groupe']"))).click();

@@ -12,6 +12,9 @@ target/
 *.iml
 *.ipr
 
+# Ignore credentials file
+src/test/resources/credentials.properties
+
 ### Eclipse ###
 .apt_generated
 .classpath

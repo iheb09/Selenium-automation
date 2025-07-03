@@ -1,4 +1,4 @@
-package com.example;
+package GestionGroupes.Tests;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
@@ -13,8 +13,15 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Properties;
 
-public class TestBilSandreGrp {
+public class TestVarGrp {
+
+    private Properties loadCredentials() throws Exception {
+        Properties props = new Properties();
+        props.load(getClass().getClassLoader().getResourceAsStream("credentials.properties"));
+        return props;
+    }
 
     private String timestamp() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -26,7 +33,7 @@ public class TestBilSandreGrp {
     }
 
     @Test
-    public void runTestBilSandreGrp() throws Exception {
+    public void runTestVarGrp() throws Exception {
         WebDriver driver = null;
 
         try {
@@ -38,9 +45,14 @@ public class TestBilSandreGrp {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
             driver.get("https://dev.aquedi.fr/connexion");
+            System.out.println("Running Test variable grp");
 
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("iLogin"))).sendKeys("usr_stag");
-            driver.findElement(By.id("iPassword")).sendKeys("aquedi");
+
+            Properties creds = loadCredentials();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("iLogin")))
+                    .sendKeys(creds.getProperty("username"));
+            driver.findElement(By.id("iPassword"))
+                    .sendKeys(creds.getProperty("password"));
             driver.findElement(By.id("btnConnexion")).click();
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Tableau de bord']")));
@@ -54,13 +66,6 @@ public class TestBilSandreGrp {
                     By.xpath("//div[contains(@class,'card') and .//h5[text()='Gestion des groupes']]"))).click();
 
 
-
-            takeScreenshot(driver, "after_accessing_page");
-
-            // WAIT FOR THE 'Groupes de modèles de rapport' TAB LINK TO BE CLICKABLE AND CLICK IT
-            WebElement groupeBilanTab = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.id("bilan-sandre-tab")));
-            groupeBilanTab.click();
 
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[text()='Ajouter un groupe']"))).click();
@@ -180,12 +185,10 @@ public class TestBilSandreGrp {
 
             System.out.println("Group 'test-iheb1-edited' successfully deleted.");
 
-
         } finally {
             if (driver != null) {
                 driver.quit();
             }
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package com.example;
+package GestionGroupes.Tests;
 
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
@@ -13,8 +13,15 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Properties;
 
 public class TestFormGrp {
+
+    private Properties loadCredentials() throws Exception {
+        Properties props = new Properties();
+        props.load(getClass().getClassLoader().getResourceAsStream("credentials.properties"));
+        return props;
+    }
 
     private String timestamp() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -38,9 +45,15 @@ public class TestFormGrp {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
             driver.get("https://dev.aquedi.fr/connexion");
+            System.out.println("Running Test formulaire grp");
 
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("iLogin"))).sendKeys("usr_stag");
-            driver.findElement(By.id("iPassword")).sendKeys("aquedi");
+
+
+            Properties creds = loadCredentials();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("iLogin")))
+                    .sendKeys(creds.getProperty("username"));
+            driver.findElement(By.id("iPassword"))
+                    .sendKeys(creds.getProperty("password"));
             driver.findElement(By.id("btnConnexion")).click();
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Tableau de bord']")));
