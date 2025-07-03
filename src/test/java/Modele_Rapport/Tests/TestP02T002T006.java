@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
-public class TestP02T002T005 {
+public class TestP02T002T006 {
 
     private Properties loadCredentials() throws Exception {
         Properties props = new Properties();
@@ -30,13 +30,13 @@ public class TestP02T002T005 {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
     }
 
-    private void takeScreenshot(WebDriver driver, String name) throws Exception {
+    private void takeScreenshot(WebDriver driver, String stepNumber, String name) throws Exception {
         File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        FileHandler.copy(srcFile, new File("src/test/screenshots/" + name + "_" + timestamp() + ".png"));
+        FileHandler.copy(srcFile, new File("src/test/screenshots/" + stepNumber + "_" + name + "_" + timestamp() + ".png"));
     }
 
     @Test
-    public void runTestP02T002() throws Exception {
+    public void runTestP02T006() throws Exception {
         WebDriver driver = null;
 
         try {
@@ -45,15 +45,11 @@ public class TestP02T002T005 {
             options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
 
             driver = new RemoteWebDriver(new URL("http://localhost:4444"), options);
-
-            // Enable remote file uploads
             ((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
-
-            // Set full screen resolution
             driver.manage().window().setSize(new Dimension(1920, 1080));
 
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-            System.out.println("Running TestP02T002-T005");
+            System.out.println("Running TestP02T002-T006");
 
             driver.get("https://dev.aquedi.fr/connexion");
 
@@ -108,7 +104,7 @@ public class TestP02T002T005 {
                     By.cssSelector("div.modal-content")));
             System.out.println("DEBUG: Modal closed");
 
-            takeScreenshot(driver, "modele aquedi crée");
+            takeScreenshot(driver, "1", "modele_aquedi_cree");
 
             WebElement sourceVariable = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//li[contains(@class, 'variableLigne')]//span[@title='AA1ASDIG_H2S']/ancestor::li")
@@ -141,7 +137,43 @@ public class TestP02T002T005 {
             Thread.sleep(1000);
             ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
 
-            takeScreenshot(driver, "drag and drop , checkbox");
+            takeScreenshot(driver, "2", "drag_and_drop_checkbox");
+
+            WebElement variableCard = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.cssSelector("div.card.p-2.d-flex.justify-content-between.align-items-center")
+            ));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", variableCard);
+            new Actions(driver)
+                    .moveToElement(variableCard)
+                    .pause(Duration.ofMillis(300))
+                    .contextClick()
+                    .perform();
+
+            takeScreenshot(driver, "3", "right_clicked_on_first_variable_card");
+
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[contains(text(),'Gérer les paramètres de la variable')]")
+            ));
+
+            WebElement libelleInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.cssSelector("input#varLibelle[formcontrolname='libelle']")));
+            libelleInput.clear();
+            libelleInput.sendKeys("iheb edited");
+
+            WebElement agregationInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.cssSelector("ng-select[formcontrolname='agregation'] input[type='text']")));
+            agregationInput.click();
+            Thread.sleep(300);
+            agregationInput.sendKeys(Keys.ARROW_DOWN);
+            agregationInput.sendKeys(Keys.ENTER);
+
+            Thread.sleep(1000);
+            takeScreenshot(driver, "4", "edit_variable_sidebar");
+
+            WebElement appliquerBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[.//span[normalize-space()='Appliquer']]")
+            ));
+            appliquerBtn.click();
 
 
             WebElement ajouterOngletBtn = wait.until(ExpectedConditions.elementToBeClickable(
@@ -156,10 +188,8 @@ public class TestP02T002T005 {
                     By.xpath("//a[contains(., 'Renommer')]")));
             renommerBtn.click();
 
-            // UPDATED RENAME CODE
             WebElement renameInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.cssSelector("li.ng-star-inserted input.form-control[type='text']")));
-
             ((JavascriptExecutor) driver).executeScript("arguments[0].value = '';", renameInput);
             renameInput.click();
             renameInput.sendKeys("Données modifiées");
@@ -170,7 +200,7 @@ public class TestP02T002T005 {
                     By.xpath("//li[contains(@class,'ng-star-inserted')]//button[normalize-space()='Ok']")));
             ((JavascriptExecutor) driver).executeScript("arguments[0].click();", okBtn);
 
-            takeScreenshot(driver, "renommer_donnees_input");
+            takeScreenshot(driver, "5", "renommer_donnees_input");
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.xpath("//div[contains(@class,'nav-link')]/span[text()='Données modifiées']")));
@@ -183,21 +213,13 @@ public class TestP02T002T005 {
                     By.xpath("//a[contains(., 'Supprimer')]")));
             supprimerBtn.click();
 
-            // Wait for the confirmation modal to appear and click "Confirmer"
             WebElement confirmerBtn = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//div[contains(@class,'modal-footer')]//button[normalize-space()='Confirmer']")
             ));
             confirmerBtn.click();
 
-            WebElement enregistrerDonneesBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@id='btn.id' and .//span[normalize-space()='Enregistrer']]")
-            ));
-            enregistrerDonneesBtn.click();
-
-
-
             Thread.sleep(1000);
-            takeScreenshot(driver, "after editing 1ST tab and deleting 2ND");
+            takeScreenshot(driver, "6", "after_editing_1ST_tab_and_deleting_2ND");
 
         } finally {
             if (driver != null) {
