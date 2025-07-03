@@ -44,15 +44,15 @@ public class TestModRappGrp {
             driver.findElement(By.id("btnConnexion")).click();
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Tableau de bord']")));
-
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[.//span[text()='Fermer']]"))).click();
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//div[contains(@class,'btnDashboard') and .//label[text()='Référentiel']]"))).click();
 
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//div[contains(@class,'card') and .//h5[text()='Gestion des groupes']]"))).click();
 
-            wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[.//span[text()='Fermer']]"))).click();
+
 
             takeScreenshot(driver, "after_accessing_page");
 

@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class TestVarGrp {
+public class TestBilSandreGrp {
 
     private String timestamp() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
@@ -26,7 +26,7 @@ public class TestVarGrp {
     }
 
     @Test
-    public void runTestVarGrp() throws Exception {
+    public void runTestBilSandreGrp() throws Exception {
         WebDriver driver = null;
 
         try {
@@ -54,6 +54,13 @@ public class TestVarGrp {
                     By.xpath("//div[contains(@class,'card') and .//h5[text()='Gestion des groupes']]"))).click();
 
 
+
+            takeScreenshot(driver, "after_accessing_page");
+
+            // WAIT FOR THE 'Groupes de modèles de rapport' TAB LINK TO BE CLICKABLE AND CLICK IT
+            WebElement groupeBilanTab = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.id("bilan-sandre-tab")));
+            groupeBilanTab.click();
 
             wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[text()='Ajouter un groupe']"))).click();
@@ -173,10 +180,12 @@ public class TestVarGrp {
 
             System.out.println("Group 'test-iheb1-edited' successfully deleted.");
 
+
         } finally {
             if (driver != null) {
                 driver.quit();
             }
         }
     }
+
 }
