@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Properties;
 
-public class TestP02T002T008 {
+public class TestP02T002T010 {
 
     private Properties loadCredentials() throws Exception {
         Properties props = new Properties();
@@ -508,6 +508,128 @@ public class TestP02T002T008 {
             }
 
             takeScreenshot(driver, "16", "after_enregistrer_click");
+
+
+
+
+            //-Choisir un mode de modification puis "Enregistrer"
+
+            WebElement modifierButton2 = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@title='Modifier' and contains(@class, 'btn-ouvrir')]")
+            ));
+            modifierButton2.click();
+            takeScreenshot(driver, "17", "accessing test 2");
+            System.out.println("Matching dropdowns: " +
+                    driver.findElements(By.cssSelector("select[formcontrolname='frequenceCtrl']")).size());
+
+            // 1. Wait for dropdown to be visible
+            List<WebElement> candidates2 = driver.findElements(By.cssSelector("select[formcontrolname='frequenceCtrl']"));
+            WebElement dropdownFreq2 = null;
+
+            for (WebElement el : candidates2) {
+                if (el.isDisplayed()) {
+                    dropdownFreq2 = el;
+                    System.out.println("Found visible dropdown!");
+                    break;
+                }
+            }
+
+            if (dropdownFreq2 == null) {
+                throw new RuntimeException("No visible dropdown found among " + candidates2.size() + " matches.");
+            }
+
+            // 3. Click to focus
+            dropdownFreq2.click();
+            dropdownFreq2.click();
+            Thread.sleep(300); // optional but improves stability
+
+            // 4. Use ARROW_DOWN 3 times (QUOTIDIEN > HEBDOMADAIRE > MENSUEL) and press ENTER
+            new Actions(driver)
+                    .sendKeys(Keys.ARROW_DOWN) // QUOTIDIEN → HEBDOMADAIRE
+                    .sendKeys(Keys.ARROW_DOWN) // HEBDOMADAIRE → MENSUEL
+                    .sendKeys(Keys.ENTER)      // select MENSUEL
+                    .perform();
+
+            // 5. Confirm value selected
+            String selectedValue2 = (String) ((JavascriptExecutor) driver)
+                    .executeScript("return arguments[0].value;", dropdownFreq2);
+            System.out.println("Selected value: " + selectedValue);
+
+            // 6. Optional: Check the visible label
+            String visibleText2 = (String) ((JavascriptExecutor) driver)
+                    .executeScript("return arguments[0].options[arguments[0].selectedIndex].text;", dropdownFreq2);
+            System.out.println("Visible text: " + visibleText);
+
+            Thread.sleep(1000);
+
+            // 7. Screenshot
+            takeScreenshot(driver, "17", "frequence_dropdown_selected");
+
+            List<WebElement> matches2 = driver.findElements(By.xpath("//input[@formcontrolname='descriptionCtrl']"));
+            WebElement descriptionInput2 = null;
+
+            for (WebElement el : matches2) {
+                if (el.isDisplayed()) {
+                    descriptionInput2 = el;
+                    System.out.println(" Found visible Description input!");
+                    break;
+                }
+            }
+
+            if (descriptionInput2 == null) {
+                throw new RuntimeException(" No visible Description input found among " + matches2.size() + " matches.");
+            }
+
+            // Now interact
+            descriptionInput2.click();
+            descriptionInput2.clear();
+            descriptionInput2.sendKeys("edited");
+
+            takeScreenshot(driver, "18", "frequence_dropdown_description");
+
+
+
+            WebElement radioButton2 = new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.cssSelector("input[formcontrolname='editModeCtrl'][value='interactive']")
+                    )
+            );
+            radioButton2.click();
+
+            takeScreenshot(driver,"19", "After radio selection");
+
+            List<WebElement> allBtns2 = driver.findElements(By.xpath("//button"));
+            for (WebElement btn : allBtns2) {
+                String text = btn.getText().trim();
+                boolean visible = btn.isDisplayed();
+                boolean enabled = btn.isEnabled();
+                System.out.println("🔍 BUTTON: [" + text + "] visible=" + visible + " enabled=" + enabled);
+            }
+
+
+            // Locate by visible text only — ignore class match (too generic)
+            WebElement EnregistrerBtn2 = new WebDriverWait(driver, Duration.ofSeconds(20)).until(d -> {
+                List<WebElement> btns2 = d.findElements(By.xpath("//button[normalize-space()='Enregistrer']"));
+                for (WebElement b : btns2) {
+                    if (b.isDisplayed() && b.isEnabled()) {
+                        return b;
+                    }
+                }
+                return null;
+            });
+
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", EnregistrerBtn2);
+            Thread.sleep(300); // Let DOM settle
+
+            try {
+                EnregistrerBtn2.click();
+            } catch (Exception e) {
+                // Fallback
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", EnregistrerBtn2);
+            }
+
+            takeScreenshot(driver, "20", "after_enregistrer_click");
 
 
 
