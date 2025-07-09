@@ -779,9 +779,18 @@ public class TestP02T002T010 {
             takeScreenshot(driver, "24", "after_partage done");
 
 
+            WebElement partagerBtn2 = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@title='Partager' and contains(@class,'btn-ouvrir')]")
+            ));
+            partagerBtn2.click();
+            Thread.sleep(500);
 
-
-
+            WebElement arreterPartageBtn = new WebDriverWait(driver, Duration.ofSeconds(15)).until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[contains(@class, 'btn-delete') and normalize-space()='Arrêter le partage']")
+                    )
+            );
+            arreterPartageBtn.click();
 
 
 
