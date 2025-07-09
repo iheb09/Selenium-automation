@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Properties;
 
-public class TestP02T002T010 {
+public class TestP02T002T015 {
 
     private Properties loadCredentials() throws Exception {
         Properties props = new Properties();
@@ -852,6 +852,16 @@ public class TestP02T002T010 {
             }
             Thread.sleep(500);
             takeScreenshot(driver, "29", "after_enregistrer_duplication");
+
+            WebElement telechargerBtn = new WebDriverWait(driver, Duration.ofSeconds(10)).until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@type='button' and @title='Télécharger' and contains(@class, 'btn-ouvrir')]")
+                    )
+            );
+            telechargerBtn.click();
+            Thread.sleep(500);
+            takeScreenshot(driver, "30", "after_telecharger");
+
 
 
 
