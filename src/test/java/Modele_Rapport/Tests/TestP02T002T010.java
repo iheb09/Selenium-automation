@@ -507,6 +507,7 @@ public class TestP02T002T010 {
             }
 
             takeScreenshot(driver, "16", "after_enregistrer_click");
+            Thread.sleep(2000);
 
 
 
@@ -516,7 +517,7 @@ public class TestP02T002T010 {
             WebElement modifierButton2 = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[@title='Modifier' and contains(@class, 'btn-ouvrir')]")
             ));
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             modifierButton2.click();
             takeScreenshot(driver, "17", "accessing test 2");
             System.out.println("Matching dropdowns: " +
@@ -821,6 +822,37 @@ public class TestP02T002T010 {
             // Click
             fermerBtn.click();
             takeScreenshot(driver, "27", "after_variables_communs_closed");
+
+            // 1. Click on the "Dupliquer" button
+            WebElement dupliquerBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@type='button' and @title='Dupliquer' and contains(@class, 'btn-ouvrir')]")
+            ));
+            dupliquerBtn.click();
+
+            // 2. Wait for the modal to appear and find the "Nom" input field inside it
+            WebElement nomInput2 = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[contains(@class,'modal-content')]//input[@formcontrolname='nom']")
+            ));
+
+            // 3. Clear and fill the input with "duplicated"
+            nomInput2.clear();
+            nomInput2.sendKeys("duplicated");
+            Thread.sleep(300);
+            takeScreenshot(driver, "28", "after_editing_name_in_duplication");
+
+            List<WebElement> buttons = driver.findElements(By.xpath(
+                    "//div[contains(@class,'modal-content')]//button[contains(@class,'btn-success')]"
+            ));
+
+            for (WebElement enregistrerBtnDup : buttons) {
+                if (enregistrerBtnDup.isDisplayed() && enregistrerBtnDup.isEnabled() && enregistrerBtnDup.getText().trim().contains("Enregistrer")) {
+                    enregistrerBtnDup.click();
+                    break;
+                }
+            }
+            Thread.sleep(500);
+            takeScreenshot(driver, "29", "after_enregistrer_duplication");
+
 
 
 
