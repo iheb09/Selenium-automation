@@ -685,58 +685,98 @@ public class TestP02T002T010 {
             takeScreenshot(driver, "22", "after_versions_click");
 
 
-            // 1. Click the Publier button
-            WebElement publierButton = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.cssSelector("button[title='Publier'].btn-valid")
+//            // 1. Click the Publier button
+//            WebElement publierButton = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.cssSelector("button[title='Publier'].btn-valid")
+//            ));
+//            publierButton.click();
+//
+//            // 2. Wait for the modal and textarea
+//            WebElement commentBox = wait.until(ExpectedConditions.visibilityOfElementLocated(
+//                    By.cssSelector("textarea[formcontrolname='commentaireCtrl']")
+//            ));
+//            takeScreenshot(driver, "23", "after_publier_clicked");
+//
+//            // 3. Enter comment
+//            commentBox.clear();
+//            commentBox.sendKeys("new version test");
+//
+//            // Optional: wait a bit for form validation to trigger
+//            Thread.sleep(500);
+//            takeScreenshot(driver, "24", "after_commentaire_modified");
+//
+//            // 4. Wait until Enregistrer button is enabled and clickable
+//            WebElement enregistrerButton = wait.until(driver1 -> {
+//                List<WebElement> buttons = driver1.findElements(
+//                        By.xpath("//button[normalize-space()='Enregistrer' and contains(@class, 'btn-success')]")
+//                );
+//                for (WebElement btn : buttons) {
+//                    if (btn.isDisplayed() && btn.isEnabled()) {
+//                        return btn;
+//                    }
+//                }
+//                return null;
+//            });
+//
+//            // 5. Click Enregistrer
+//            enregistrerButton.click();
+//            takeScreenshot(driver, "25", "after_enregistrer_clicked");
+//
+//            // 6. Wait for the confirmation modal and click the final "Publier" button
+//            WebElement finalPublierButton = wait.until(driver1 -> {
+//                List<WebElement> buttons = driver1.findElements(
+//                        By.xpath("//div[contains(@class,'modal-footer')]//button[normalize-space()='Publier']")
+//                );
+//                for (WebElement btn : buttons) {
+//                    if (btn.isDisplayed() && btn.isEnabled()) {
+//                        return btn;
+//                    }
+//                }
+//                return null;
+//            });
+//
+//            finalPublierButton.click();
+//            takeScreenshot(driver, "26", "after_publier_clicked");
+
+            // 1. Click on "Partager" button (title="Partager")
+            WebElement partagerBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@title='Partager' and contains(@class,'btn-ouvrir')]")
             ));
-            publierButton.click();
-
-            // 2. Wait for the modal and textarea
-            WebElement commentBox = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.cssSelector("textarea[formcontrolname='commentaireCtrl']")
-            ));
-            takeScreenshot(driver, "23", "after_publier_clicked");
-
-            // 3. Enter comment
-            commentBox.clear();
-            commentBox.sendKeys("new version test");
-
-            // Optional: wait a bit for form validation to trigger
+            partagerBtn.click();
             Thread.sleep(500);
-            takeScreenshot(driver, "24", "after_commentaire_modified");
 
-            // 4. Wait until Enregistrer button is enabled and clickable
-            WebElement enregistrerButton = wait.until(driver1 -> {
-                List<WebElement> buttons = driver1.findElements(
-                        By.xpath("//button[normalize-space()='Enregistrer' and contains(@class, 'btn-success')]")
-                );
-                for (WebElement btn : buttons) {
-                    if (btn.isDisplayed() && btn.isEnabled()) {
-                        return btn;
-                    }
-                }
-                return null;
-            });
+            // 2. Wait for textarea and type comment
+            WebElement commentArea = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("textarea[formcontrolname='comment']"))
+            );
+            commentArea.sendKeys("test partage selenium");
+            Thread.sleep(500);
+            // 3. Click the toggle label to enable group selection
+            WebElement toggleLabel = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//label[@for='customSwitch' and contains(text(),\"Partager avec des groupes d'utilisateurs\")]")
+            ));
+            toggleLabel.click();
+            Thread.sleep(500);
 
-            // 5. Click Enregistrer
-            enregistrerButton.click();
-            takeScreenshot(driver, "25", "after_enregistrer_clicked");
+            // 4. Wait for the combobox input to be interactable
+            WebElement comboBoxInput = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//div[contains(@class, 'modal-content') and .//h5[contains(text(), 'Partager')]]//input[@role='combobox']")
+            ));
 
-            // 6. Wait for the confirmation modal and click the final "Publier" button
-            WebElement finalPublierButton = wait.until(driver1 -> {
-                List<WebElement> buttons = driver1.findElements(
-                        By.xpath("//div[contains(@class,'modal-footer')]//button[normalize-space()='Publier']")
-                );
-                for (WebElement btn : buttons) {
-                    if (btn.isDisplayed() && btn.isEnabled()) {
-                        return btn;
-                    }
-                }
-                return null;
-            });
 
-            finalPublierButton.click();
-            takeScreenshot(driver, "26", "after_publier_clicked");
+            // 5. Click the input and press ENTER
+            comboBoxInput.click();
+            Thread.sleep(500); // Let the dropdown populate if necessary
+            comboBoxInput.sendKeys(Keys.ENTER);
+            takeScreenshot(driver, "23", "after_modal_partage_filled");
+
+            // 6. Wait for "Enregistrer" button and click it
+            WebElement enregistrerFinalBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@type='submit' and contains(text(), 'Enregistrer')]")
+            ));
+            enregistrerFinalBtn.click();
+            Thread.sleep(1000);
+            takeScreenshot(driver, "24", "after_partage done");
 
 
 
