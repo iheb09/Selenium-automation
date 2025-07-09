@@ -862,6 +862,19 @@ public class TestP02T002T015 {
             Thread.sleep(500);
             takeScreenshot(driver, "30", "after_telecharger");
 
+            WebElement listeVariablesBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@type='button' and @title='Liste des variables utilisées' and contains(@class, 'btn-ouvrir')]")
+            ));
+            listeVariablesBtn.click();
+            Thread.sleep(1000); // or use explicit wait if something specific appears
+            takeScreenshot(driver, "31", "after_liste_variables_display");
+            driver.navigate().back();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//button[@title='Liste des variables utilisées']") // or any other element from previous page
+            ));
+            takeScreenshot(driver, "32", "after_liste_variables");
+
+
 
 
 
