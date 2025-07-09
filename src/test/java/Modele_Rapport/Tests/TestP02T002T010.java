@@ -481,7 +481,6 @@ public class TestP02T002T010 {
                 String text = btn.getText().trim();
                 boolean visible = btn.isDisplayed();
                 boolean enabled = btn.isEnabled();
-                System.out.println("🔍 BUTTON: [" + text + "] visible=" + visible + " enabled=" + enabled);
             }
 
 
@@ -603,7 +602,6 @@ public class TestP02T002T010 {
                 String text = btn.getText().trim();
                 boolean visible = btn.isDisplayed();
                 boolean enabled = btn.isEnabled();
-                System.out.println("🔍 BUTTON: [" + text + "] visible=" + visible + " enabled=" + enabled);
             }
 
 
@@ -628,8 +626,121 @@ public class TestP02T002T010 {
                 // Fallback
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", EnregistrerBtn2);
             }
-
+            Thread.sleep(1000);
             takeScreenshot(driver, "20", "after_enregistrer_click");
+
+            wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+
+            // Step 1: Wait for the link to be present in DOM
+            WebElement hiddenLink = wait.until(ExpectedConditions.presenceOfElementLocated(
+                    By.linkText("Modification modèle de rapport"))
+            );
+
+            // Step 2: Scroll into view
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", hiddenLink);
+            Thread.sleep(500); // Allow any animation or rendering
+
+            // Step 3: Wait until it's clickable (visible + enabled)
+            WebElement visibleLink = wait.until(ExpectedConditions.elementToBeClickable(hiddenLink));
+
+            // Step 4: Click
+            visibleLink.click();
+            Thread.sleep(2000);
+            takeScreenshot(driver, "21", "back_to_list");
+
+            WebElement nodeToDoubleClick3 = null;
+            int maxScrollAttempts = 20;
+
+            for (int i = 0; i < maxScrollAttempts; i++) {
+                try {
+                    nodeToDoubleClick3 = driver.findElement(
+                            By.xpath("//div[contains(@class,'folderStyle') and .//span[@title='test_iheb']]")
+                    );
+                    if (nodeToDoubleClick3.isDisplayed()) {
+                        break; // Found it!
+                    }
+                } catch (NoSuchElementException | StaleElementReferenceException e) {
+                    // Not found yet — scroll and retry
+                }
+
+                // Scroll down a bit
+                ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 300);");
+                Thread.sleep(500); // Wait for lazy-load/rendering
+            }
+
+            if (nodeToDoubleClick3 == null) {
+                throw new RuntimeException("Could not find folder node titled 'test_iheb' after scrolling.");
+            }
+
+            // Scroll into center and double-click
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", nodeToDoubleClick3);
+            new Actions(driver).doubleClick(nodeToDoubleClick3).perform();
+            Thread.sleep(1000);
+
+            // Re-locate the Versions button AFTER double-click
+            WebElement versionsButton2 = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@title='Versions' and contains(@class, 'btn-ouvrir')]")
+            ));
+            versionsButton2.click();
+            takeScreenshot(driver, "22", "after_versions_click");
+
+
+            // 1. Click the Publier button
+            WebElement publierButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("button[title='Publier'].btn-valid")
+            ));
+            publierButton.click();
+
+            // 2. Wait for the modal and textarea
+            WebElement commentBox = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.cssSelector("textarea[formcontrolname='commentaireCtrl']")
+            ));
+            takeScreenshot(driver, "23", "after_publier_clicked");
+
+            // 3. Enter comment
+            commentBox.clear();
+            commentBox.sendKeys("new version test");
+
+            // Optional: wait a bit for form validation to trigger
+            Thread.sleep(500);
+            takeScreenshot(driver, "24", "after_commentaire_modified");
+
+            // 4. Wait until Enregistrer button is enabled and clickable
+            WebElement enregistrerButton = wait.until(driver1 -> {
+                List<WebElement> buttons = driver1.findElements(
+                        By.xpath("//button[normalize-space()='Enregistrer' and contains(@class, 'btn-success')]")
+                );
+                for (WebElement btn : buttons) {
+                    if (btn.isDisplayed() && btn.isEnabled()) {
+                        return btn;
+                    }
+                }
+                return null;
+            });
+
+            // 5. Click Enregistrer
+            enregistrerButton.click();
+            takeScreenshot(driver, "25", "after_enregistrer_clicked");
+
+            // 6. Wait for the confirmation modal and click the final "Publier" button
+            WebElement finalPublierButton = wait.until(driver1 -> {
+                List<WebElement> buttons = driver1.findElements(
+                        By.xpath("//div[contains(@class,'modal-footer')]//button[normalize-space()='Publier']")
+                );
+                for (WebElement btn : buttons) {
+                    if (btn.isDisplayed() && btn.isEnabled()) {
+                        return btn;
+                    }
+                }
+                return null;
+            });
+
+            finalPublierButton.click();
+            takeScreenshot(driver, "26", "after_publier_clicked");
+
+
+
+
 
 
 
