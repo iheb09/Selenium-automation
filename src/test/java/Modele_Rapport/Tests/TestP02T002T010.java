@@ -516,6 +516,7 @@ public class TestP02T002T010 {
             WebElement modifierButton2 = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[@title='Modifier' and contains(@class, 'btn-ouvrir')]")
             ));
+            Thread.sleep(1000);
             modifierButton2.click();
             takeScreenshot(driver, "17", "accessing test 2");
             System.out.println("Matching dropdowns: " +
@@ -791,6 +792,40 @@ public class TestP02T002T010 {
                     )
             );
             arreterPartageBtn.click();
+            Thread.sleep(500);
+            takeScreenshot(driver, "25", "after_MAJ_partage_done");
+
+            WebElement docVariablesBtn = new WebDriverWait(driver, Duration.ofSeconds(15)).until(
+                    ExpectedConditions.elementToBeClickable(
+                            By.xpath("//button[@type='button' and @title='Documents ayant des variables en commun' and contains(@class, 'btn-ouvrir')]")
+                    )
+            );
+            docVariablesBtn.click();
+            Thread.sleep(500);
+            takeScreenshot(driver, "26", "after_variables_communs_clicked");
+
+            // Wait for any visible modal-content with the expected title
+            WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[contains(@class, 'modal-content') and .//span[contains(text(), 'Liste des documents')]]")
+            ));
+
+            // Then look for the 'Fermer' button within that modal
+            WebElement fermerBtn = modal.findElement(By.xpath(".//button[contains(@class, 'btn-success') and contains(text(), 'Fermer')]"));
+
+            // Wait for the button to become clickable
+            wait.until(ExpectedConditions.elementToBeClickable(fermerBtn));
+
+            // Scroll into view to ensure no overlap
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", fermerBtn);
+
+            // Click
+            fermerBtn.click();
+            takeScreenshot(driver, "27", "after_variables_communs_closed");
+
+
+
+
+
 
 
 
