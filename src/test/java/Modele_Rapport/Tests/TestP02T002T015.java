@@ -317,11 +317,19 @@ public class TestP02T002T015 {
                     By.xpath("//button[@id='btn.id' and .//span[normalize-space()='Enregistrer']]")
             ));
             enregistrerVarButton.click();
+            Thread.sleep(2000);
 
-            Thread.sleep(1000);
-            WebElement creationLink = wait.until(ExpectedConditions.elementToBeClickable(
+
+
+            // 1. Wait until the link is visible
+            WebElement creationLink = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.linkText("Création modèle de rapport")
             ));
+
+            // 2. Wait until it's clickable
+            wait.until(ExpectedConditions.elementToBeClickable(creationLink));
+
+            // 3. Click the link
             creationLink.click();
 
             WebElement nodeToDoubleClick2 = wait.until(ExpectedConditions.elementToBeClickable(
@@ -879,42 +887,73 @@ public class TestP02T002T015 {
             ));
             takeScreenshot(driver, "32", "after_liste_variables");
 
-            // 1. Click the "Plus d'actions..." dropdown (moduleSelect)
-            WebElement moreActionsBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[contains(@class,'moduleSelect')]//p[normalize-space()=\"Plus d'actions...\"]")
+
+            //P02 T020
+
+//            // 1. Click the "Plus d'actions..." dropdown (moduleSelect)
+//            WebElement moreActionsBtn = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//div[contains(@class,'moduleSelect')]//p[normalize-space()=\"Plus d'actions...\"]")
+//            ));
+//            moreActionsBtn.click();
+//
+//            // 2. Wait for "Archiver tout" to become visible and clickable
+//            WebElement archiverToutBtn = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//span[contains(@class, 'btnLabel') and normalize-space()='Archiver tout']")
+//            ));
+//            archiverToutBtn.click();
+//            takeScreenshot(driver, "33", "after_archiver_tout_triggered");
+//
+//            // 1. Wait for the textarea inside the "Archiver" modal
+//            WebElement commentAreaArchive = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//div[contains(@class,'modal-content') and .//span[normalize-space()='Archiver']]//textarea[@formcontrolname='commentaireCtrl']")
+//            ));
+//            String ArchiveText = "archived by Selenium";
+//            commentAreaArchive.sendKeys(ArchiveText);
+//            wait.until(d -> commentAreaArchive.getAttribute("value").equals(ArchiveText));
+//
+//            // 2. Wait for and click the "Enregistrer" button inside that same modal
+//            WebElement enregistrerBtnArchive = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//div[contains(@class,'modal-content') and .//span[normalize-space()='Archiver']]//button[normalize-space()='Enregistrer']")
+//            ));
+//            enregistrerBtnArchive.click();
+//
+//            takeScreenshot(driver, "34", "after_enregistrer_archive_triggered");
+//
+//            WebElement confirmerBtnArchi = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//div[contains(@class,'modal-content') and .//span[contains(translate(text(), 'ÉÊéè', 'eeee'), 'archiver ce modele')]]//button[contains(text(), 'Confirmer')]")            ));
+//
+//            confirmerBtnArchi.click();
+//
+//            Thread.sleep(1000);
+//            takeScreenshot(driver, "35", "after_confirmer_archive_triggered");
+
+
+            // 2. Click on "Supprimer" (Delete) button
+            WebElement supprimerBtnDelete = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@type='button' and contains(@class,'btn-remove') and @title='Supprimer']"))
+            );
+            supprimerBtnDelete.click();
+
+            // Wait for modal with expected confirmation text
+            WebElement modalSupp = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[contains(@class, 'modal-content') and .//div[contains(text(), 'supprimer cette version')]]")
             ));
-            moreActionsBtn.click();
 
-            // 2. Wait for "Archiver tout" to become visible and clickable
-            WebElement archiverToutBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//span[contains(@class, 'btnLabel') and normalize-space()='Archiver tout']")
+            // Then locate the "Confirmer" button inside it
+            WebElement confirmerBtnDelete = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//div[contains(@class, 'modal-content') and .//div[contains(text(), 'supprimer cette version')]]//button[normalize-space()='Confirmer']")
             ));
-            archiverToutBtn.click();
-            takeScreenshot(driver, "33", "after_archiver_tout_triggered");
 
-            // 1. Wait for the textarea inside the "Archiver" modal
-            WebElement commentAreaArchive = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[contains(@class,'modal-content') and .//span[normalize-space()='Archiver']]//textarea[@formcontrolname='commentaireCtrl']")
-            ));
-            String ArchiveText = "archived by Selenium";
-            commentAreaArchive.sendKeys(ArchiveText);
-            wait.until(d -> commentAreaArchive.getAttribute("value").equals(ArchiveText));
+            // Optionally scroll into view
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", confirmerBtnDelete);
 
-            // 2. Wait for and click the "Enregistrer" button inside that same modal
-            WebElement enregistrerBtnArchive = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[contains(@class,'modal-content') and .//span[normalize-space()='Archiver']]//button[normalize-space()='Enregistrer']")
-            ));
-            enregistrerBtnArchive.click();
+            takeScreenshot(driver, "35", "after_delete_modal_open");
 
-            takeScreenshot(driver, "34", "after_enregistrer_archive_triggered");
-
-            WebElement confirmerBtnArchi = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[contains(@class,'modal-content') and .//span[contains(translate(text(), 'ÉÊéè', 'eeee'), 'archiver ce modele')]]//button[contains(text(), 'Confirmer')]")            ));
-
-            confirmerBtnArchi.click();
-
+            // Click it
+            confirmerBtnDelete.click();
             Thread.sleep(1000);
-            takeScreenshot(driver, "35", "after_confirmer_archive_triggered");
+
+            takeScreenshot(driver, "36", "after_confirmer_delete");
 
 
 
