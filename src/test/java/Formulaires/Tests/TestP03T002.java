@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
-public class TestP03T001 {
+public class TestP03T002 {
 
     private Properties loadCredentials() throws Exception {
         Properties props = new Properties();
@@ -36,7 +36,7 @@ public class TestP03T001 {
     }
 
     @Test
-    public void runTestP02T001() throws Exception {
+    public void runTestP02T002() throws Exception {
         WebDriver driver = null;
 
         try {
@@ -81,54 +81,48 @@ public class TestP03T001 {
             takeScreenshot(driver,"2", "after_clicking_test_iheb_folder");
 
 
-            // 1. Click "Créer un Formulaire" button
-            WebElement createFormBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[.//span[contains(normalize-space(), 'Créer un Formulaire')]]")
+
+            // 1. Click "Importer un Formulaire"
+            WebElement importBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[.//span[contains(normalize-space(), 'Importer un Formulaire')]]")
             ));
-            createFormBtn.click();
+            importBtn.click();
 
-            // 2. Wait for the modal to appear
-            WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//div[contains(@class,'modal-content')]//span[contains(text(), 'Créer un nouveau formulaire')]")
-            ));
-
-            // 3. Fill "Nom"
-            WebElement nomInput = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.cssSelector("input[formcontrolname='nomCtrl']")));
-            nomInput.sendKeys("Formulaire Selenium");
-
-            // 4. Fill "Description"
-            WebElement descInput = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.cssSelector("textarea[formcontrolname='descriptionCtrl']")));
-            descInput.sendKeys("Automated form created via Selenium");
-
-            // 5. Select "1 minute" from Fréquence dropdown
-            WebElement freqDropdown = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.cssSelector("select[formcontrolname='frequencyCtrl']")));
-            Select select = new Select(freqDropdown);
-            select.selectByVisibleText("1 minute");
-
-            // 6. Select "Groupe_test_FORMULAIRE" in Groupes de formulaires (typeahead input + Enter)
-            WebElement groupInput = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.cssSelector("ng-select[formcontrolname='groupeCtrl'] input[role='combobox']")));
-            groupInput.click();
-            groupInput.sendKeys("Groupe_test_FORMULAIRE");
-            Thread.sleep(500); // wait for suggestions to appear
-            groupInput.sendKeys(Keys.ENTER);
-
-            // Optional: take screenshot here if needed
-             takeScreenshot(driver, "3", "formulaire_ready");
-
-            // Wait until the "Valider" button becomes enabled (not disabled)
-            WebElement validerBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(text(),'Valider') and not(@disabled)]")
+            // 2. Wait for modal title to appear
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[contains(@class, 'modal-content')]//span[contains(text(), 'Importer un formulaire')]")
             ));
 
-            // Click Valider
-            validerBtn.click();
+            // 3. Upload the file
+            URL resource = getClass().getClassLoader().getResource("formulaire.xlsx");
+            if (resource == null) {
+                throw new RuntimeException("Fichier rapport.xlsx introuvable dans les resources.");
+            }
+            File fileToUpload = new File(resource.toURI());
+            System.out.println("Uploading file: " + fileToUpload.getAbsolutePath());
+
+            WebElement fileInput = driver.findElement(By.id("fileInput"));
+            fileInput.sendKeys(fileToUpload.getAbsolutePath());
+
+            // 4. Select "Groupe_test_FORMULAIRE"
+            WebElement groupeSelect = wait.until(ExpectedConditions.elementToBeClickable(By.id("groupeInput")));
+            Select groupeDropdown = new Select(groupeSelect);
+            groupeDropdown.selectByVisibleText("Groupe_test_FORMULAIRE");
+
+            // 5. Select "test_iheb"
+            WebElement dossierSelect = wait.until(ExpectedConditions.elementToBeClickable(By.id("dossierInput")));
+            Select dossierDropdown = new Select(dossierSelect);
+            Thread.sleep(500);
+            dossierDropdown.selectByVisibleText("test_iheb");
+            takeScreenshot(driver, "5", "formulaire_importé_rdy");
+
+//            // 6. Wait for "Importer" button to be enabled and click
+            WebElement importFinalBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[contains(text(),'Importer') and not(@disabled)]")
+            ));
+            importFinalBtn.click();
             Thread.sleep(1000);
-            takeScreenshot(driver, "4", "formulaire_crée");
-
+            takeScreenshot(driver,"6", "formulaire_importé_crée");
 
 
 

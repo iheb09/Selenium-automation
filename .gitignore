@@ -16,6 +16,7 @@ target/
 src/test/resources/credentials.properties
 # Ignore rapport.xlsx
 src/test/resources/rapport.xlsx
+src/test/resources/formulaire.xlsx
 # Ignore screenshots folder
 src/test/screenshots
 
