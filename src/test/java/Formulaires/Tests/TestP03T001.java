@@ -168,6 +168,42 @@ public class TestP03T001 {
             Thread.sleep(1000);
             takeScreenshot(driver, "7", "Formulaire_vierge_crée");
 
+            // Step 1: Click "Plus d'actions..."
+            WebElement plusActionsButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//div[contains(@class,'see-more-button')]")
+            ));
+            plusActionsButton.click();
+
+            // Step 2: Wait for the menu to appear and click on "Importer une version du formulaire"
+            WebElement importVersionOption = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//ul//li//span[normalize-space(text())='Importer une version du formulaire']")
+            ));
+            importVersionOption.click();
+            takeScreenshot(driver,"8","Plus_d'actions_clicked");
+
+            //file upload
+            URL resource = getClass().getClassLoader().getResource("formulaire.xlsx");
+            if (resource == null) {
+                throw new RuntimeException("Fichier rapport.xlsx introuvable dans les resources.");
+            }
+            File fileToUpload = new File(resource.toURI());
+            System.out.println("Uploading file: " + fileToUpload.getAbsolutePath());
+
+            WebElement fileInput = driver.findElement(By.id("fileInput"));
+            fileInput.sendKeys(fileToUpload.getAbsolutePath());
+
+            Thread.sleep(500);
+            takeScreenshot(driver, "9", "formulaire_ready");
+
+            // Wait for the Importer button to be visible and enabled
+            WebElement importButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//div[contains(@class, 'modal-content')]//button[normalize-space()='Importer' and not(@disabled)]")
+            ));
+            // Click the button
+            importButton.click();
+
+            Thread.sleep(2000);
+            takeScreenshot(driver, "10", "Formulaire_submitted");
 
 
 
