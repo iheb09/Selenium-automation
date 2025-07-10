@@ -129,6 +129,45 @@ public class TestP03T001 {
             Thread.sleep(1000);
             takeScreenshot(driver, "4", "formulaire_crée");
 
+            //back to formulaires
+            driver.navigate().back();
+            Thread.sleep(500);
+            takeScreenshot(driver, "5", "back_to_formulaires");
+
+
+            WebElement versionsBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@title='Versions' and contains(@class, 'btn-ouvrir')]")
+            ));
+            versionsBtn.click();
+
+            WebElement creerNouvelleVersionBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//button[contains(@class,'main-button') and .//span[contains(text(), 'Créer une nouvelle version du formulaire')]]")
+            ));
+
+            // Once visible, wait until clickable
+            wait.until(ExpectedConditions.elementToBeClickable(creerNouvelleVersionBtn)).click();
+
+            // Wait for modal with "Créer une nouvelle version" title to be visible
+            WebElement modalHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//div[contains(@class, 'modal-content')]//span[normalize-space()='Créer une nouvelle version']")
+            ));
+            takeScreenshot(driver, "6", "new_version_modal_triggered");
+
+            // Click the checkbox: "Formulaire vierge"
+            WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("input[formcontrolname='createFromViergeCtrl']")));
+            checkbox.click();
+
+            // Wait for "Valider" button to become enabled
+            WebElement validerBtnNewVersion = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//div[contains(@class,'modal-footer')]//button[normalize-space()='Valider' and not(@disabled)]")
+            ));
+            validerBtnNewVersion.click();
+            Thread.sleep(1000);
+            driver.navigate().back();
+            Thread.sleep(1000);
+            takeScreenshot(driver, "7", "Formulaire_vierge_crée");
+
 
 
 
