@@ -59,11 +59,11 @@ public class TestP09 {
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Tableau de bord']")));
 
-//            WebElement fermerBtn1 = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//button[contains(@class, 'btn') and .//span[normalize-space(text())='Fermer']]")
-//            ));
-//
-//            fermerBtn1.click();
+            WebElement fermerBtn1 = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[contains(@class, 'btn') and .//span[normalize-space(text())='Fermer']]")
+            ));
+
+            fermerBtn1.click();
 
             takeScreenshot(driver,"1","Accessing_site");
 
@@ -109,7 +109,7 @@ public class TestP09 {
 
             // Find and click the 20th inside *that* calendar
             WebElement debutDateToClick = calendarDebut.findElement(
-                    By.xpath(".//span[contains(@class, 'flatpickr-day') and text()='20' and not(contains(@class,'prevMonthDay')) and not(contains(@class,'nextMonthDay'))]")
+                    By.xpath(".//span[contains(@class, 'flatpickr-day') and text()='14' and not(contains(@class,'prevMonthDay')) and not(contains(@class,'nextMonthDay'))]")
             );
             wait.until(ExpectedConditions.elementToBeClickable(debutDateToClick)).click();
 
@@ -124,7 +124,7 @@ public class TestP09 {
             ));
 
             WebElement finDateToClick = calendarFin.findElement(
-                    By.xpath(".//span[contains(@class, 'flatpickr-day') and text()='21' and not(contains(@class,'prevMonthDay')) and not(contains(@class,'nextMonthDay'))]")
+                    By.xpath(".//span[contains(@class, 'flatpickr-day') and text()='15' and not(contains(@class,'prevMonthDay')) and not(contains(@class,'nextMonthDay'))]")
             );
             wait.until(ExpectedConditions.elementToBeClickable(finDateToClick)).click();
 
@@ -142,6 +142,23 @@ public class TestP09 {
             wait.until(ExpectedConditions.elementToBeClickable(validerBtn)).click();
             wait.until(ExpectedConditions.elementToBeClickable(configBtn));
             takeScreenshot(driver,"4","Message_configured");
+
+            wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@title='Dupliquer' and contains(@class, 'btn-ouvrir')]")
+            )).click();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//span[normalize-space()='Dupliquer la configuration du message']")
+            ));
+            WebElement nomDup = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                            (By.cssSelector("input[formcontrolname='nom']")
+                            )));
+            nomDup.clear();
+            nomDup.sendKeys("Test Message Dubplicated");
+            WebElement validerDub = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(".//button[contains(text(), 'Valider') and not(@disabled)]")));
+            validerDub.click();
+            wait.until(ExpectedConditions.elementToBeClickable(configBtn));
+            takeScreenshot(driver,"5","Message_duplicated");
+
 
 
 
