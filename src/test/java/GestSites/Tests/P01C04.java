@@ -79,13 +79,13 @@ public class P01C04 {
             WebElement codeInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.cssSelector("input[formcontrolname='codeCtrl']")
             ));
-            codeInput.sendKeys("test_iheb2");
+            codeInput.sendKeys("test_iheb3");
 
             // 2. Fill "Nom *"
             WebElement nomInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.cssSelector("input[formcontrolname='nomCtrl']")
             ));
-            nomInput.sendKeys("test_iheb2");
+            nomInput.sendKeys("test_iheb3");
 
             // 3. Fill "Description"
             WebElement descriptionInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
@@ -100,7 +100,6 @@ public class P01C04 {
             heureDebutInput.click();
             heureDebutInput.sendKeys("17");
 
-            takeScreenshot(driver,"debug","deb");
             // 5. Click on "Groupe d'utilisateurs" input then press Enter
             WebElement groupeInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
                     By.cssSelector("app-select[formcontrolname='groupesCtrl'] input[role='combobox']")  // inside ng-select
@@ -108,7 +107,6 @@ public class P01C04 {
             groupeInput.click();
             Thread.sleep(500); // small delay to allow options to load
             groupeInput.sendKeys(Keys.ENTER);
-            takeScreenshot(driver,"debug","debug");
 
             // 6. Click on "Ajouter" button
             WebElement ajouterBtn = wait.until(ExpectedConditions.elementToBeClickable(
@@ -119,6 +117,58 @@ public class P01C04 {
             System.out.println("✅ Site creation form submitted.");
             Thread.sleep(1000);
             takeScreenshot(driver,"3","site_crée");
+
+
+
+            By listeOuvragesButton = By.xpath("(//button[contains(., 'Liste des ouvrages')])[2]");
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(listeOuvragesButton));
+            button.click();
+
+            By creerOuvrageButton = By.xpath("//button[.//span[contains(text(), 'Créer un ouvrage')]]");
+            WebElement buttonouvrage = wait.until(ExpectedConditions.elementToBeClickable(creerOuvrageButton));
+            buttonouvrage.click();
+
+            // Fill "Nom"
+            WebElement nomInput2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[formcontrolname='nomCtrl']")));
+            nomInput2.sendKeys("Test_iheb");
+
+// Fill "Code Sandre"
+            WebElement codeSandreInput = driver.findElement(By.cssSelector("input[formcontrolname='codeSandreCtrl']"));
+            codeSandreInput.sendKeys("TST_IHEB");
+
+// Click & select in "Departement"
+            WebElement departement = driver.findElement(By.cssSelector("ng-select[formcontrolname='departementCtrl'] input[type='text']"));
+            departement.click();
+            departement.sendKeys(Keys.ENTER);
+            Thread.sleep(1000);
+
+// Wait for "Commune" to be enabled
+            WebElement commune = driver.findElement(By.cssSelector("ng-select[formcontrolname='communeCtrl'] input[type='text']:not([disabled])"));
+            commune.click();
+            commune.sendKeys(Keys.ENTER);
+
+// Click & select in "Maitre d'ouvrage"
+            WebElement maitreOuvrage = driver.findElement(By.cssSelector("app-select[formcontrolname='maitreOuvrageCtrl'] ng-select input[type='text']"));
+            maitreOuvrage.click();
+            maitreOuvrage.sendKeys(Keys.ENTER);
+
+// Click & select in "Exploitant"
+            WebElement exploitant = driver.findElement(By.cssSelector("app-select[formcontrolname='exploitantCtrl'] ng-select input[type='text']"));
+            exploitant.click();
+            exploitant.sendKeys(Keys.ENTER);
+
+// Fill "Commentaire"
+            WebElement commentaireInput = driver.findElement(By.cssSelector("input[formcontrolname='commentaireCtrl']"));
+            commentaireInput.sendKeys("commentaire_iheb");
+
+// Optionally, submit form
+            WebElement ajouterBtn2 = driver.findElement(By.xpath("//button[text()='Ajouter']"));
+            ajouterBtn2.click();
+
+            takeScreenshot(driver,"4","after_form_complete");
+
+
+
         } finally {
             if (driver != null) {
                 driver.quit();
