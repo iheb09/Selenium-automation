@@ -3,6 +3,7 @@ package GestSites.Tests;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Properties;
 
 public class P01C04 {
@@ -130,11 +132,11 @@ public class P01C04 {
 
             // Fill "Nom"
             WebElement nomInput2 = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[formcontrolname='nomCtrl']")));
-            nomInput2.sendKeys("Test_iheb");
+            nomInput2.sendKeys("Test_iheb1");
 
 // Fill "Code Sandre"
             WebElement codeSandreInput = driver.findElement(By.cssSelector("input[formcontrolname='codeSandreCtrl']"));
-            codeSandreInput.sendKeys("TST_IHEB");
+            codeSandreInput.sendKeys("TST_IHEB2");
 
 // Click & select in "Departement"
             WebElement departement = driver.findElement(By.cssSelector("ng-select[formcontrolname='departementCtrl'] input[type='text']"));
@@ -159,13 +161,89 @@ public class P01C04 {
 
 // Fill "Commentaire"
             WebElement commentaireInput = driver.findElement(By.cssSelector("input[formcontrolname='commentaireCtrl']"));
-            commentaireInput.sendKeys("commentaire_iheb");
+            commentaireInput.sendKeys("commentaire_iheb1");
 
-// Optionally, submit form
-            WebElement ajouterBtn2 = driver.findElement(By.xpath("//button[text()='Ajouter']"));
-            ajouterBtn2.click();
 
-            takeScreenshot(driver,"4","after_form_complete");
+
+            List<WebElement> ajouterButtons = driver.findElements(By.xpath("//button[normalize-space(text())='Ajouter']"));
+
+            boolean clicked = false;
+
+            for (WebElement buttonA : ajouterButtons) {
+                if (buttonA.isDisplayed() && buttonA.isEnabled()) {
+                    try {
+                        buttonA.click();
+                        System.out.println("✅ Clicked on the 'Ajouter' button.");
+                        clicked = true;
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("⛔ Failed to click a button: " + e.getMessage());
+                    }
+                }
+            }
+
+            if (!clicked) {
+                throw new RuntimeException("❌ Could not find a clickable 'Ajouter' button.");
+            }
+            Thread.sleep(1000);
+            takeScreenshot(driver,"4","ouvrage_added");
+
+            WebElement ptdemesure = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[contains(., 'Points de mesure')]")
+            ));
+            ptdemesure.click();
+            Thread.sleep(500);
+
+            // Locate the button using the span text
+            By creerPointMesureBtn = By.xpath("//button[.//span[normalize-space(text())='Créer un point de mesure']]");
+            WebElement buttonPt = wait.until(ExpectedConditions.elementToBeClickable(creerPointMesureBtn));
+            buttonPt.click();
+            System.out.println("✅ Clicked on 'Créer un point de mesure' button.");
+
+
+            Actions actions = new Actions(driver);
+            // 1. Fill "Nom du point de mesure"
+            WebElement nomInput1 = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//input[@formcontrolname='ptsMesureNomCtrl']")));
+            nomInput1.sendKeys("PM_TEST");
+
+// 2. Fill "Code du point de mesure"
+            WebElement codeInput1 = driver.findElement(By.xpath("//input[@formcontrolname='numPointMesureCtrl']"));
+            codeInput1.sendKeys("PM123");
+
+// 3. Click on "Support" combobox and press ENTER
+            WebElement supportCombo = driver.findElement(By.xpath("//ng-select[@formcontrolname='supportCtrl']//input"));
+            supportCombo.click();
+            actions.sendKeys(Keys.ENTER).perform();  // select first option
+
+// 4. Click on "Localisation du point de mesure" combobox and press ENTER
+            WebElement localisationCombo = driver.findElement(By.xpath("//ng-select[@formcontrolname='elementCtrl']//input"));
+            localisationCombo.click();
+            actions.sendKeys(Keys.ENTER).perform();  // select first option
+
+            List<WebElement> ajouterButtons1 = driver.findElements(By.xpath("//button[normalize-space(text())='Ajouter']"));
+
+            boolean clicked1 = false;
+
+            for (WebElement buttonA : ajouterButtons1) {
+                if (buttonA.isDisplayed() && buttonA.isEnabled()) {
+                    try {
+                        buttonA.click();
+                        System.out.println("✅ Clicked on the 'Ajouter' button.");
+                        clicked1 = true;
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("⛔ Failed to click a button: " + e.getMessage());
+                    }
+                }
+            }
+
+            if (!clicked1) {
+                throw new RuntimeException("❌ Could not find a clickable 'Ajouter' button.");
+            }
+            Thread.sleep(1000);
+            takeScreenshot(driver,"5","pt_mesure_added");
+            System.out.println("✅ Modal form filled and submitted.");
 
 
 
