@@ -5,17 +5,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.io.FileHandler;
-import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -301,6 +296,59 @@ public class P01C04 {
             exportExcelBtn.click();
             Thread.sleep(500);
             takeScreenshot(driver,"6","exported_Excel");
+            Thread.sleep(3000);
+
+            // Click the "Référentiel" link
+            WebElement referentielLink = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//a[normalize-space(text())='Référentiel']")
+            ));
+            referentielLink.click();
+
+            // Locate the card-body div containing the h5 with text 'Unités de mesures'
+            WebElement unitCard = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//div[contains(@class,'card-body') and .//h5[normalize-space()='Unités de mesures']]")
+            ));
+            unitCard.click();
+            takeScreenshot(driver,"7","accessing_unite_de_mesure");
+
+            // Locate the button by its span text
+            WebElement createUnitButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[.//span[normalize-space()='Créer une unité de mesure']]")
+            ));
+
+            createUnitButton.click();
+
+            // 1. Click on the Site dropdown and select first option via keys
+            WebElement siteDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("ng-select#site input")));
+            siteDropdown.click();
+            siteDropdown.sendKeys(Keys.ARROW_DOWN, Keys.ENTER);
+
+// 2. Fill "Nom de l'unité de mesure"
+            WebElement nomInput3 = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[formcontrolname='libelleCtrl']")));
+            nomInput3.sendKeys("tst_iheb");
+
+// 3. Fill "Code"
+            WebElement codeInput2 = driver.findElement(By.cssSelector("input[formcontrolname='codeSandreCtrl']"));
+            codeInput2.sendKeys("tst_iheb");
+
+// 4. Fill "Symbole"
+            WebElement symboleInput = driver.findElement(By.cssSelector("input[formcontrolname='symboleCtrl']"));
+            symboleInput.sendKeys("tst_iheb");
+
+// 5. Click checkbox "Unité de référence"
+            WebElement checkbox = driver.findElement(By.cssSelector("input#defaultCheck1"));
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+
+            takeScreenshot(driver,"8","filling_form");
+            // 6. Wait for and click on the enabled "Ajouter" button
+            WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[contains(text(), 'Ajouter') and not(@disabled)]")
+            ));
+            addButton.click();
+            Thread.sleep(2000);
+            takeScreenshot(driver,"9","unite_de_mesure_added");
 
 
 
