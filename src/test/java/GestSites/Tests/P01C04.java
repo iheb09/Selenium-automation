@@ -199,94 +199,108 @@ public class P01C04 {
             ptdemesure.click();
             Thread.sleep(500);
 
-//            // Locate the button using the span text
-//            By creerPointMesureBtn = By.xpath("//button[.//span[normalize-space(text())='Créer un point de mesure']]");
-//            WebElement buttonPt = wait.until(ExpectedConditions.elementToBeClickable(creerPointMesureBtn));
-//            buttonPt.click();
-//            System.out.println("✅ Clicked on 'Créer un point de mesure' button.");
-//
-//
-//            Actions actions = new Actions(driver);
-//            // 1. Fill "Nom du point de mesure"
-//            WebElement nomInput1 = wait.until(ExpectedConditions.visibilityOfElementLocated(
-//                    By.xpath("//input[@formcontrolname='ptsMesureNomCtrl']")));
-//            nomInput1.sendKeys("PM_TEST");
-//
-//// 2. Fill "Code du point de mesure"
-//            WebElement codeInput1 = driver.findElement(By.xpath("//input[@formcontrolname='numPointMesureCtrl']"));
-//            codeInput1.sendKeys("PM123");
-//
-//// 3. Click on "Support" combobox and press ENTER
-//            WebElement supportCombo = driver.findElement(By.xpath("//ng-select[@formcontrolname='supportCtrl']//input"));
-//            supportCombo.click();
-//            actions.sendKeys(Keys.ENTER).perform();  // select first option
-//
-//// 4. Click on "Localisation du point de mesure" combobox and press ENTER
-//            WebElement localisationCombo = driver.findElement(By.xpath("//ng-select[@formcontrolname='elementCtrl']//input"));
-//            localisationCombo.click();
-//            actions.sendKeys(Keys.ENTER).perform();  // select first option
-//
-//            List<WebElement> ajouterButtons1 = driver.findElements(By.xpath("//button[normalize-space(text())='Ajouter']"));
-//
-//            boolean clicked1 = false;
-//
-//            for (WebElement buttonA : ajouterButtons1) {
-//                if (buttonA.isDisplayed() && buttonA.isEnabled()) {
-//                    try {
-//                        buttonA.click();
-//                        System.out.println("✅ Clicked on the 'Ajouter' button.");
-//                        clicked1 = true;
-//                        break;
-//                    } catch (Exception e) {
-//                        System.out.println("⛔ Failed to click a button: " + e.getMessage());
-//                    }
-//                }
-//            }
-//
-//            if (!clicked1) {
-//                throw new RuntimeException("❌ Could not find a clickable 'Ajouter' button.");
-//            }
-//            Thread.sleep(1000);
-//            takeScreenshot(driver,"5","pt_mesure_added");
-//            System.out.println("✅ Modal form filled and submitted.");
+            // Locate the button using the span text
+            By creerPointMesureBtn = By.xpath("//button[.//span[normalize-space(text())='Créer un point de mesure']]");
+            WebElement buttonPt = wait.until(ExpectedConditions.elementToBeClickable(creerPointMesureBtn));
+            buttonPt.click();
+            System.out.println("✅ Clicked on 'Créer un point de mesure' button.");
 
-            WebElement creerEnMasseBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[.//span[contains(normalize-space(), 'Créer en masse des points de mesure')]]")
-            ));
-            creerEnMasseBtn.click();
-            System.out.println("✅ Clicked 'Créer en masse des points de mesure' button.");
 
-            // Step 1: Log working dir and resolve absolute path
-            File fileToUpload = Paths.get("src", "test", "resources", "rapport.xlsx").toAbsolutePath().toFile();
-            System.out.println("Working directory: " + new File(".").getAbsolutePath());
-            System.out.println("Resolved file path: " + fileToUpload.getAbsolutePath());
+            Actions actions = new Actions(driver);
+            // 1. Fill "Nom du point de mesure"
+            WebElement nomInput1 = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                    By.xpath("//input[@formcontrolname='ptsMesureNomCtrl']")));
+            nomInput1.sendKeys("PM_TEST");
 
-            if (!fileToUpload.exists()) {
-                throw new RuntimeException("❌ Fichier introuvable à l'emplacement : " + fileToUpload.getAbsolutePath());
+// 2. Fill "Code du point de mesure"
+            WebElement codeInput1 = driver.findElement(By.xpath("//input[@formcontrolname='numPointMesureCtrl']"));
+            codeInput1.sendKeys("PM123");
+
+// 3. Click on "Support" combobox and press ENTER
+            WebElement supportCombo = driver.findElement(By.xpath("//ng-select[@formcontrolname='supportCtrl']//input"));
+            supportCombo.click();
+            actions.sendKeys(Keys.ENTER).perform();  // select first option
+
+// 4. Click on "Localisation du point de mesure" combobox and press ENTER
+            WebElement localisationCombo = driver.findElement(By.xpath("//ng-select[@formcontrolname='elementCtrl']//input"));
+            localisationCombo.click();
+            actions.sendKeys(Keys.ENTER).perform();  // select first option
+
+            List<WebElement> ajouterButtons1 = driver.findElements(By.xpath("//button[normalize-space(text())='Ajouter']"));
+
+            boolean clicked1 = false;
+
+            for (WebElement buttonA : ajouterButtons1) {
+                if (buttonA.isDisplayed() && buttonA.isEnabled()) {
+                    try {
+                        buttonA.click();
+                        System.out.println("✅ Clicked on the 'Ajouter' button.");
+                        clicked1 = true;
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("⛔ Failed to click a button: " + e.getMessage());
+                    }
+                }
             }
 
-            // Step 2: Locate the input element
-            WebElement fileInput = driver.findElement(By.id("inputFile"));
-
-            // Step 3: If Remote, use FileDetector via RemoteWebElement
-            if (fileInput instanceof RemoteWebElement) {
-                System.out.println("Detected RemoteWebElement, applying LocalFileDetector.");
-                ((RemoteWebElement) fileInput).setFileDetector(new LocalFileDetector());
-                ((RemoteWebElement) fileInput).sendKeys(fileToUpload.getAbsolutePath());
-            } else {
-                System.out.println("Detected local WebDriver, sending file path directly.");
-                fileInput.sendKeys(fileToUpload.getAbsolutePath());
+            if (!clicked1) {
+                throw new RuntimeException("❌ Could not find a clickable 'Ajouter' button.");
             }
+            Thread.sleep(1000);
+            takeScreenshot(driver,"5","pt_mesure_added");
+            System.out.println("✅ Modal form filled and submitted.");
 
-            // Step 4: Take screenshot for debug
+//            WebElement creerEnMasseBtn = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//button[.//span[contains(normalize-space(), 'Créer en masse des points de mesure')]]")
+//            ));
+//            creerEnMasseBtn.click();
+//            System.out.println("✅ Clicked 'Créer en masse des points de mesure' button.");
+//
+//            // Step 1: Log working dir and resolve absolute path
+//            File fileToUpload = Paths.get("src", "test", "resources", "rapport.xlsx").toAbsolutePath().toFile();
+//            System.out.println("Working directory: " + new File(".").getAbsolutePath());
+//            System.out.println("Resolved file path: " + fileToUpload.getAbsolutePath());
+//
+//            if (!fileToUpload.exists()) {
+//                throw new RuntimeException("❌ Fichier introuvable à l'emplacement : " + fileToUpload.getAbsolutePath());
+//            }
+//
+//            // Step 2: Locate the input element
+//            WebElement fileInput = driver.findElement(By.id("inputFile"));
+//
+//            // Step 3: If Remote, use FileDetector via RemoteWebElement
+//            if (fileInput instanceof RemoteWebElement) {
+//                System.out.println("Detected RemoteWebElement, applying LocalFileDetector.");
+//                ((RemoteWebElement) fileInput).setFileDetector(new LocalFileDetector());
+//                ((RemoteWebElement) fileInput).sendKeys(fileToUpload.getAbsolutePath());
+//            } else {
+//                System.out.println("Detected local WebDriver, sending file path directly.");
+//                fileInput.sendKeys(fileToUpload.getAbsolutePath());
+//            }
+//
+//            // Step 4: Take screenshot for debug
+//
+//            // Wait for the modal and "Importer" button to be present and clickable
+//            WebElement importerButton = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//div[contains(@class, 'modal-content')]//button[contains(@class, 'btn-primary') and normalize-space(text())='Importer']")
+//            ));
+//            importerButton.click();
+//            Thread.sleep(500);
+//            takeScreenshot(driver,"5","pt_mesure_enmasse");
 
-            // Wait for the modal and "Importer" button to be present and clickable
-            WebElement importerButton = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[contains(@class, 'modal-content')]//button[contains(@class, 'btn-primary') and normalize-space(text())='Importer']")
+            // 1. Click the "Gestion du tableau" button
+            WebElement gestionBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[contains(@class, 'btn-outline-secondary') and contains(., 'Gestion du tableau')]")
             ));
-            importerButton.click();
+            gestionBtn.click();
+
+// 2. Click "Exporter au format EXCEL"
+            WebElement exportExcelBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//span[contains(@class, 'slick-gridmenu-content') and normalize-space(text())='Exporter au format EXCEL']")
+            ));
+            exportExcelBtn.click();
             Thread.sleep(500);
-            takeScreenshot(driver,"5","pt_mesure_enmasse");
+            takeScreenshot(driver,"6","exported_Excel");
 
 
 
