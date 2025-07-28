@@ -64,11 +64,11 @@ public class TestP02T002T022 {
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h4[text()='Tableau de bord']")));
 
-            WebElement fermerBtn1 = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[contains(@class, 'btn') and .//span[normalize-space(text())='Fermer']]")
-            ));
-
-            fermerBtn1.click();
+//            WebElement fermerBtn1 = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//button[contains(@class, 'btn') and .//span[normalize-space(text())='Fermer']]")
+//            ));
+//
+//            fermerBtn1.click();
 
 
             wait.until(ExpectedConditions.elementToBeClickable(
@@ -794,7 +794,7 @@ public class TestP02T002T022 {
             Thread.sleep(1000);
             takeScreenshot(driver, "24", "after_partage done");
 
-            WebElement partagerBtn2 = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            WebElement partagerBtn2 = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[@title='Partager' and contains(@class,'btn-ouvrir')]")
             ));
             partagerBtn2.click();
