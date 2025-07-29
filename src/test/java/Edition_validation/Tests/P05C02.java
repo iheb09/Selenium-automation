@@ -3,6 +3,7 @@ package Edition_validation.Tests;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -76,40 +77,67 @@ public class P05C02 {
                     By.xpath("//div[contains(@class,'card-body') and .//h5[text()='Dossiers de variables']]")
             ));
             dossiersCard.click();
-            WebElement creerDossierBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@title='Créer un dossier' and .//span[contains(text(), 'Créer un dossier')]]")
-            ));
-            creerDossierBtn.click();
-            takeScreenshot(driver,"2","Creer_dossier_modal");
-            // 1. Press on the first combobox ("Type de dossier à créer")
-            WebElement folderTypeCombo = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//select[@formcontrolname='folderTypeCtrl']")
-            ));
-            folderTypeCombo.click(); // Open dropdown
-            folderTypeCombo.sendKeys(Keys.ARROW_DOWN);
-            folderTypeCombo.sendKeys(Keys.ARROW_DOWN);
-            folderTypeCombo.sendKeys(Keys.ENTER);
+//            WebElement creerDossierBtn = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//button[@title='Créer un dossier' and .//span[contains(text(), 'Créer un dossier')]]")
+//            ));
+//            creerDossierBtn.click();
+//            takeScreenshot(driver,"2","Creer_dossier_modal");
+//            // 1. Press on the first combobox ("Type de dossier à créer")
+//            WebElement folderTypeCombo = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//select[@formcontrolname='folderTypeCtrl']")
+//            ));
+//            folderTypeCombo.click(); // Open dropdown
+//            folderTypeCombo.sendKeys(Keys.ARROW_DOWN);
+//            folderTypeCombo.sendKeys(Keys.ARROW_DOWN);
+//            folderTypeCombo.sendKeys(Keys.ENTER);
+//
+//            // 2. Fill in the "Nom" field
+//            WebElement nameInput = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//input[@formcontrolname='nameFolderCtrl']")
+//            ));
+//            nameInput.sendKeys("Test_iheb_edition_validation");
+//
+//            // 3. Press on the second combobox ("Site"), then press Enter
+//            WebElement siteComboInput = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//ng-select[@formcontrolname='siteCtrl']//input[@type='text']")
+//            ));
+//            siteComboInput.click(); // Focus input
+//            Thread.sleep(500); // allow dropdown to load
+//            siteComboInput.sendKeys(Keys.ENTER);
+//
+//            WebElement createButton = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//button[@type='submit' and contains(., 'Créer') and not(@disabled)]")
+//            ));
+//            createButton.click();
+//            Thread.sleep(1000);
+            By folderLocator = By.xpath("//div[contains(@class, 'folder') and contains(normalize-space(), 'Test_iheb_edition_validation')]");
+            WebElement folder = wait.until(ExpectedConditions.presenceOfElementLocated(folderLocator));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", folder);
+            wait.until(ExpectedConditions.visibilityOf(folder));
+            Thread.sleep(500);
+            Actions actions = new Actions(driver);
+            actions.moveToElement(folder).contextClick().perform();
 
-            // 2. Fill in the "Nom" field
-            WebElement nameInput = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//input[@formcontrolname='nameFolderCtrl']")
-            ));
-            nameInput.sendKeys("Test_iheb");
-
-            // 3. Press on the second combobox ("Site"), then press Enter
-            WebElement siteComboInput = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//ng-select[@formcontrolname='siteCtrl']//input[@type='text']")
-            ));
-            siteComboInput.click(); // Focus input
-            Thread.sleep(500); // allow dropdown to load
-            siteComboInput.sendKeys(Keys.ENTER);
-
-            WebElement createButton = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//button[@type='submit' and contains(., 'Créer') and not(@disabled)]")
-            ));
-            createButton.click();
-            Thread.sleep(1000);
             takeScreenshot(driver,"3","Creer_dossier_done");
+            By ajouterVariables = By.xpath("//ul[contains(@class, 'dropdown-menu') and contains(@class, 'show')]//a[contains(., 'Ajouter des variables')]");
+            WebElement ajouterBtn = wait.until(ExpectedConditions.elementToBeClickable(ajouterVariables));
+            ajouterBtn.click();
+            takeScreenshot(driver,"4","ajouter_variables_clicked");
+
+            By checkIcon = By.cssSelector("div.slick-cell.l0.r0.boutonsAction.true i.fa-check");
+            WebElement iconElement = wait.until(ExpectedConditions.presenceOfElementLocated(checkIcon));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", iconElement);
+            wait.until(ExpectedConditions.elementToBeClickable(iconElement)).click();
+
+            Thread.sleep(500);
+
+            By validerBtn = By.xpath("//div[contains(@class, 'modal-footer')]//button[contains(., 'Valider') and not(@disabled)]");
+            WebElement validerElement = wait.until(ExpectedConditions.elementToBeClickable(validerBtn));
+            validerElement.click();
+            Thread.sleep(500);
+            takeScreenshot(driver,"5","variable_added");
+
+
 
 
 
