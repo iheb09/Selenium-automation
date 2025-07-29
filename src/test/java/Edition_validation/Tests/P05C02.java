@@ -8,6 +8,7 @@ import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -136,6 +137,47 @@ public class P05C02 {
             validerElement.click();
             Thread.sleep(500);
             takeScreenshot(driver,"5","variable_added");
+
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", folder);
+            wait.until(ExpectedConditions.visibilityOf(folder));
+            Thread.sleep(500);
+            actions.moveToElement(folder).contextClick().perform();
+
+            By exportManuel = By.xpath("//ul[contains(@class, 'dropdown-menu') and contains(@class, 'show')]//a[contains(text(), 'Export Manuel')]");
+            WebElement exportManuelElement = wait.until(ExpectedConditions.elementToBeClickable(exportManuel));
+            exportManuelElement.click();
+
+            // Locate the "Période" dropdown
+            WebElement periodeDropdown = driver.findElement(By.cssSelector("select[formcontrolname='granularityCtrl']"));
+
+            // Select "DemiHeure" by its value
+            Select selectPeriode = new Select(periodeDropdown);
+            selectPeriode.selectByValue("DEMIHEURE");
+
+
+            // Locate the start date input
+            WebElement dateDebutInput = driver.findElement(By.cssSelector("ng2-flatpickr[formcontrolname='dateDebutCtrl'] input.flatpickr-input"));
+            dateDebutInput.click();
+            dateDebutInput.clear();
+            dateDebutInput.sendKeys("28/07/2025");
+            dateDebutInput.sendKeys(Keys.ENTER);
+
+// Locate the end date input
+            WebElement dateFinInput = driver.findElement(By.cssSelector("ng2-flatpickr[formcontrolname='dateFinCtrl'] input.flatpickr-input"));
+            dateFinInput.click();
+            dateFinInput.clear();
+            dateFinInput.sendKeys("29/07/2025");
+            dateFinInput.sendKeys(Keys.ENTER);
+
+// Optional: take a screenshot after setting the dates
+            WebElement exporterButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//div[@class='modal-footer']//button[contains(text(), 'Exporter') and not(@disabled)]")
+            ));
+
+// Click the Exporter button
+            exporterButton.click();
+            takeScreenshot(driver, "6", "exporter_clicked");
+
 
 
 
