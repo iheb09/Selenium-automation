@@ -8,7 +8,6 @@ import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -16,6 +15,7 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Properties;
 
 public class P05C02 {
@@ -78,39 +78,40 @@ public class P05C02 {
                     By.xpath("//div[contains(@class,'card-body') and .//h5[text()='Dossiers de variables']]")
             ));
             dossiersCard.click();
-//            WebElement creerDossierBtn = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//button[@title='Créer un dossier' and .//span[contains(text(), 'Créer un dossier')]]")
-//            ));
-//            creerDossierBtn.click();
-//            takeScreenshot(driver,"2","Creer_dossier_modal");
-//            // 1. Press on the first combobox ("Type de dossier à créer")
-//            WebElement folderTypeCombo = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//select[@formcontrolname='folderTypeCtrl']")
-//            ));
-//            folderTypeCombo.click(); // Open dropdown
-//            folderTypeCombo.sendKeys(Keys.ARROW_DOWN);
-//            folderTypeCombo.sendKeys(Keys.ARROW_DOWN);
-//            folderTypeCombo.sendKeys(Keys.ENTER);
-//
-//            // 2. Fill in the "Nom" field
-//            WebElement nameInput = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//input[@formcontrolname='nameFolderCtrl']")
-//            ));
-//            nameInput.sendKeys("Test_iheb_edition_validation");
-//
-//            // 3. Press on the second combobox ("Site"), then press Enter
-//            WebElement siteComboInput = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//ng-select[@formcontrolname='siteCtrl']//input[@type='text']")
-//            ));
-//            siteComboInput.click(); // Focus input
-//            Thread.sleep(500); // allow dropdown to load
-//            siteComboInput.sendKeys(Keys.ENTER);
-//
-//            WebElement createButton = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//button[@type='submit' and contains(., 'Créer') and not(@disabled)]")
-//            ));
-//            createButton.click();
-//            Thread.sleep(1000);
+            WebElement creerDossierBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@title='Créer un dossier' and .//span[contains(text(), 'Créer un dossier')]]")
+            ));
+            creerDossierBtn.click();
+            takeScreenshot(driver,"2","Creer_dossier_modal");
+            // 1. Press on the first combobox ("Type de dossier à créer")
+            WebElement folderTypeCombo = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//select[@formcontrolname='folderTypeCtrl']")
+            ));
+            folderTypeCombo.click(); // Open dropdown
+            folderTypeCombo.sendKeys(Keys.ARROW_DOWN);
+            folderTypeCombo.sendKeys(Keys.ARROW_DOWN);
+            folderTypeCombo.sendKeys(Keys.ENTER);
+
+            // 2. Fill in the "Nom" field
+            WebElement nameInput = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//input[@formcontrolname='nameFolderCtrl']")
+            ));
+            nameInput.sendKeys("Test_iheb_edition_validation");
+
+            // 3. Press on the second combobox ("Site"), then press Enter
+            WebElement siteComboInput = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//ng-select[@formcontrolname='siteCtrl']//input[@type='text']")
+            ));
+            siteComboInput.click(); // Focus input
+            Thread.sleep(500); // allow dropdown to load
+            siteComboInput.sendKeys(Keys.ENTER);
+
+            WebElement createButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@type='submit' and contains(., 'Créer') and not(@disabled)]")
+            ));
+            createButton.click();
+            Thread.sleep(1000);
+            takeScreenshot(driver,"2","dossiers");
             By folderLocator = By.xpath("//div[contains(@class, 'folder') and contains(normalize-space(), 'Test_iheb_edition_validation')]");
             WebElement folder = wait.until(ExpectedConditions.presenceOfElementLocated(folderLocator));
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", folder);
@@ -138,45 +139,103 @@ public class P05C02 {
             Thread.sleep(500);
             takeScreenshot(driver,"5","variable_added");
 
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", folder);
-            wait.until(ExpectedConditions.visibilityOf(folder));
-            Thread.sleep(500);
-            actions.moveToElement(folder).contextClick().perform();
+//            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", folder);
+//            wait.until(ExpectedConditions.visibilityOf(folder));
+//            Thread.sleep(500);
+//            actions.moveToElement(folder).contextClick().perform();
 
-            By exportManuel = By.xpath("//ul[contains(@class, 'dropdown-menu') and contains(@class, 'show')]//a[contains(text(), 'Export Manuel')]");
-            WebElement exportManuelElement = wait.until(ExpectedConditions.elementToBeClickable(exportManuel));
-            exportManuelElement.click();
-
-            // Locate the "Période" dropdown
-            WebElement periodeDropdown = driver.findElement(By.cssSelector("select[formcontrolname='granularityCtrl']"));
-
-            // Select "DemiHeure" by its value
-            Select selectPeriode = new Select(periodeDropdown);
-            selectPeriode.selectByValue("DEMIHEURE");
-
-
-            // Locate the start date input
-            WebElement dateDebutInput = driver.findElement(By.cssSelector("ng2-flatpickr[formcontrolname='dateDebutCtrl'] input.flatpickr-input"));
-            dateDebutInput.click();
-            dateDebutInput.clear();
-            dateDebutInput.sendKeys("28/07/2025");
-            dateDebutInput.sendKeys(Keys.ENTER);
-
-// Locate the end date input
-            WebElement dateFinInput = driver.findElement(By.cssSelector("ng2-flatpickr[formcontrolname='dateFinCtrl'] input.flatpickr-input"));
-            dateFinInput.click();
-            dateFinInput.clear();
-            dateFinInput.sendKeys("29/07/2025");
-            dateFinInput.sendKeys(Keys.ENTER);
-
-// Optional: take a screenshot after setting the dates
-            WebElement exporterButton = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[@class='modal-footer']//button[contains(text(), 'Exporter') and not(@disabled)]")
-            ));
-
-// Click the Exporter button
-            exporterButton.click();
+//            By exportManuel = By.xpath("//ul[contains(@class, 'dropdown-menu') and contains(@class, 'show')]//a[contains(text(), 'Export Manuel')]");
+//            WebElement exportManuelElement = wait.until(ExpectedConditions.elementToBeClickable(exportManuel));
+//            exportManuelElement.click();
+//
+//            // Locate the "Période" dropdown
+//            WebElement periodeDropdown = driver.findElement(By.cssSelector("select[formcontrolname='granularityCtrl']"));
+//
+//            // Select "DemiHeure" by its value
+//            Select selectPeriode = new Select(periodeDropdown);
+//            selectPeriode.selectByValue("DEMIHEURE");
+//
+//
+//            // Locate the start date input
+//            WebElement dateDebutInput = driver.findElement(By.cssSelector("ng2-flatpickr[formcontrolname='dateDebutCtrl'] input.flatpickr-input"));
+//            dateDebutInput.click();
+//            dateDebutInput.clear();
+//            dateDebutInput.sendKeys("28/07/2025");
+//            dateDebutInput.sendKeys(Keys.ENTER);
+//
+//            // Locate the end date input
+//            WebElement dateFinInput = driver.findElement(By.cssSelector("ng2-flatpickr[formcontrolname='dateFinCtrl'] input.flatpickr-input"));
+//            dateFinInput.click();
+//            dateFinInput.clear();
+//            dateFinInput.sendKeys("29/07/2025");
+//            dateFinInput.sendKeys(Keys.ENTER);
+//
+//            // Optional: take a screenshot after setting the dates
+//            WebElement exporterButton = wait.until(ExpectedConditions.elementToBeClickable(
+//                    By.xpath("//div[@class='modal-footer']//button[contains(text(), 'Exporter') and not(@disabled)]")
+//            ));
+//
+//            // Click the Exporter button
+//            exporterButton.click();
             takeScreenshot(driver, "6", "exporter_clicked");
+
+            By menuInitialLink = By.xpath("//a[contains(text(), 'Menu initial') and @href='/editionValidation']");
+            WebElement linkElement = wait.until(ExpectedConditions.elementToBeClickable(menuInitialLink));
+            linkElement.click();
+
+            // Locate the "Variables LIMS" card
+            By variablesLIMSCard = By.xpath("//div[contains(@class, 'card-body') and .//h5[text()='Variables LIMS']]");
+            WebElement cardElement = wait.until(ExpectedConditions.elementToBeClickable(variablesLIMSCard));
+            cardElement.click();
+            takeScreenshot(driver,"7","access_LIMS");
+
+            By menuInitialLink2 = By.xpath("//a[contains(text(), 'Menu initial') and @href='/editionValidation']");
+            WebElement linkElement2 = wait.until(ExpectedConditions.elementToBeClickable(menuInitialLink2));
+            linkElement2.click();
+
+            WebElement dossiersCard2 = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//div[contains(@class,'card-body') and .//h5[text()='Dossiers de variables']]")
+            ));
+            dossiersCard2.click();
+
+            By folderLocator2 = By.xpath("//div[contains(@class, 'folder') and contains(normalize-space(), 'Test_iheb_edition_validation')]");
+            WebElement folder2 = wait.until(ExpectedConditions.presenceOfElementLocated(folderLocator2));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", folder2);
+            wait.until(ExpectedConditions.visibilityOf(folder2));
+            Thread.sleep(500);
+            actions.moveToElement(folder2).contextClick().perform();
+
+            // Locate the "Graphique" link by its text and icon
+            By graphiqueLink = By.xpath("//a[contains(., 'Graphique') and .//i[contains(@class, 'icon-graph')]]");
+            WebElement linkElement3 = wait.until(ExpectedConditions.elementToBeClickable(graphiqueLink));
+            linkElement3.click();
+            takeScreenshot(driver,"8","graphique_clicked");
+            // Wait for the Graphique simple card and click the visible label for the checkbox
+            WebElement checkboxLabel = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//mat-card[.//mat-card-title[contains(text(),'Graphique simple')]]//label[@for='mat-checkbox-1-input']")));
+
+            checkboxLabel.click();
+            // Find all buttons that contain "Valider"
+            List<WebElement> validerButtons = driver.findElements(By.xpath("//button[contains(text(),'Valider')]"));
+
+            boolean clicked = false;
+
+            for (WebElement button : validerButtons) {
+                if (button.isDisplayed() && button.isEnabled()) {
+                    // Wait until it's clickable before clicking
+                    wait.until(ExpectedConditions.elementToBeClickable(button)).click();
+                    clicked = true;
+                    break;
+                }
+            }
+            takeScreenshot(driver,"9","valider_graphique_clicked");
+
+            if (!clicked) {
+                throw new RuntimeException("No visible and clickable 'Valider' button found.");
+            }
+
+
+
 
 
 
