@@ -234,6 +234,11 @@ public class P05C02 {
                 throw new RuntimeException("No visible and clickable 'Valider' button found.");
             }
 
+            WebElement graphiqueSpan = wait.until(ExpectedConditions.elementToBeClickable(By.id("btnGaph")));
+            graphiqueSpan.click();
+
+            takeScreenshot(driver,"10","graphique_2_clicked");
+
 
 
 
