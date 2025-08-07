@@ -239,6 +239,26 @@ public class P05C02 {
 
             takeScreenshot(driver,"10","graphique_2_clicked");
 
+            // Locate the link by its visible text
+            WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.linkText("Dossiers de variables")
+            ));
+            link.click();
+
+            By folderLocator3 = By.xpath("//div[contains(@class, 'folder') and contains(normalize-space(), 'Test_iheb_edition_validation')]");
+            WebElement folder3 = wait.until(ExpectedConditions.presenceOfElementLocated(folderLocator3));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", folder3);
+            wait.until(ExpectedConditions.visibilityOf(folder3));
+            Thread.sleep(500);
+            actions.moveToElement(folder3).contextClick().perform();
+
+            WebElement exportBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//a[contains(text(), 'Exporter les variables')]")
+            ));
+
+            exportBtn.click();
+            takeScreenshot(driver,"11","export_variable_clicked");
+
 
 
 
