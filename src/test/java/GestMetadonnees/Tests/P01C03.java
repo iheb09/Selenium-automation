@@ -223,7 +223,7 @@ public class P01C03 {
             confirmButton.click();
 
 
-            takeScreenshot(driver,"5","Metadonne_deleted");
+            takeScreenshot(driver,"10","Metadonne_deleted");
 
 
         } finally {
