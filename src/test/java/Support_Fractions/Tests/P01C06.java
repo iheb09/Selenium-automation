@@ -189,19 +189,6 @@ public class P01C06 {
             Thread.sleep(1000);
             takeScreenshot(driver,"7","fraction_added");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         } finally {
             if (driver != null) {
                 driver.quit();
