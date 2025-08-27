@@ -77,63 +77,63 @@ public class P01C06 {
             ));
             supportsCard.click();
 
-//            WebElement creerSupportBtn = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//button[@id='btn.id' and .//span[normalize-space()='Créer un support']]")
-//            ));
-//            creerSupportBtn.click();
-//
-//            // Code
-//            WebElement codeField = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.cssSelector("input[formcontrolname='codeCtrl']")
-//            ));
-//            codeField.sendKeys("100");
-//
-//            // Libellé
-//            WebElement libelleField = driver.findElement(
-//                    By.cssSelector("input[formcontrolname='libelleCtrl']")
-//            );
-//            libelleField.sendKeys("Iheb Test");
-//
-//            // Nom International
-//            WebElement nomInterField = driver.findElement(
-//                    By.cssSelector("input[formcontrolname='nomInternaCtrl']")
-//            );
-//            nomInterField.sendKeys("Iheb International Test");
-//
-//            // Statut dropdown
-//            WebElement statutSelect = driver.findElement(
-//                    By.cssSelector("select[formcontrolname='statutCtrl']")
-//            );
-//            Select statutDropdown = new Select(statutSelect);
-//            statutDropdown.selectByVisibleText("Validé");
-//
-//            // Auteur
-//            WebElement auteurField = driver.findElement(
-//                    By.cssSelector("input[formcontrolname='auteurCtrl']")
-//            );
-//            auteurField.sendKeys("Iheb");
-//
-//            // Commentaire
-//            WebElement commentaireArea = driver.findElement(
-//                    By.cssSelector("textarea[formcontrolname='commentaireCtrl']")
-//            );
-//            commentaireArea.sendKeys("Ceci est un commentaire test.");
-//
-//            takeScreenshot(driver,"2","Form_creaate_support_filled");
-//
-//            // Attendre que le bouton Ajouter soit activé
-//            WebElement ajouterButton = wait.until(ExpectedConditions.elementToBeClickable(
-//                    By.xpath("//button[normalize-space()='Ajouter']")
-//            ));
-//            ajouterButton.click();
-//            Thread.sleep(1000);
-//            takeScreenshot(driver,"3","support_created");
+            WebElement creerSupportBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[@id='btn.id' and .//span[normalize-space()='Créer un support']]")
+            ));
+            creerSupportBtn.click();
+
+            // Code
+            WebElement codeField = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector("input[formcontrolname='codeCtrl']")
+            ));
+            codeField.sendKeys("10000");
+
+            // Libellé
+            WebElement libelleField = driver.findElement(
+                    By.cssSelector("input[formcontrolname='libelleCtrl']")
+            );
+            libelleField.sendKeys("Iheb Test");
+
+            // Nom International
+            WebElement nomInterField = driver.findElement(
+                    By.cssSelector("input[formcontrolname='nomInternaCtrl']")
+            );
+            nomInterField.sendKeys("Iheb International Test");
+
+            // Statut dropdown
+            WebElement statutSelect = driver.findElement(
+                    By.cssSelector("select[formcontrolname='statutCtrl']")
+            );
+            Select statutDropdown = new Select(statutSelect);
+            statutDropdown.selectByVisibleText("Validé");
+
+            // Auteur
+            WebElement auteurField = driver.findElement(
+                    By.cssSelector("input[formcontrolname='auteurCtrl']")
+            );
+            auteurField.sendKeys("Iheb");
+
+            // Commentaire
+            WebElement commentaireArea = driver.findElement(
+                    By.cssSelector("textarea[formcontrolname='commentaireCtrl']")
+            );
+            commentaireArea.sendKeys("Ceci est un commentaire test.");
+
+            takeScreenshot(driver,"2","Form_creaate_support_filled");
+
+            // Attendre que le bouton Ajouter soit activé
+            WebElement ajouterButton = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.xpath("//button[normalize-space()='Ajouter']")
+            ));
+            ajouterButton.click();
+            Thread.sleep(1000);
+            takeScreenshot(driver,"3","support_created");
 
             WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(
                     By.cssSelector("input.form-control.search-filter.filter-code_sandre")
             ));
             searchField.clear();
-            searchField.sendKeys("100");
+            searchField.sendKeys("10000");
             Thread.sleep(2000);
             takeScreenshot(driver,"4","support_located");
             WebElement voirFractionsBtn = wait.until(ExpectedConditions.elementToBeClickable(
@@ -166,9 +166,9 @@ public class P01C06 {
             auteurInput.sendKeys("iheb");
 
             // Select "Statut"
-            WebElement statutSelect = driver.findElement(By.cssSelector("select[formcontrolname='statutCtrl']"));
-            Select statutDropdown = new Select(statutSelect);
-            statutDropdown.selectByVisibleText("Validé");
+            WebElement statutSelect2 = driver.findElement(By.cssSelector("select[formcontrolname='statutCtrl']"));
+            Select statutDropdown2 = new Select(statutSelect2);
+            statutDropdown2.selectByVisibleText("Validé");
 
             // Fill "Commentaire"
             WebElement commentaireInput = driver.findElement(By.cssSelector("textarea[formcontrolname='commentaireCtrl']"));

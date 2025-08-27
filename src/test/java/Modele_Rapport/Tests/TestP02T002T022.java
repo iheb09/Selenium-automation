@@ -75,7 +75,7 @@ public class TestP02T002T022 {
                     By.xpath("//div[contains(@class,'btnDashboard') and .//label[text()='Modèles & Rapports']]"))).click();
 
             WebElement nodeToDoubleClick = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[contains(@class,'node-content-wrapper') and .//span[normalize-space()='test_iheb']]")
+                    By.xpath("//div[contains(@class,'node-content-wrapper') and .//span[normalize-space()='test_iheb1']]")
             ));
 
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", nodeToDoubleClick);
@@ -102,6 +102,7 @@ public class TestP02T002T022 {
 
             WebElement descInput = driver.findElement(By.cssSelector("textarea[formcontrolname='descriptionCtrl']"));
             descInput.sendKeys("test 1.1 scenario t002-t003.");
+            takeScreenshot(driver,"deb","deb");
 
             WebElement enregistrerBtn = wait.until(ExpectedConditions.elementToBeClickable(
                     By.xpath("//button[contains(., 'Enregistrer') and not(@disabled)]")));
@@ -333,7 +334,7 @@ public class TestP02T002T022 {
             creationLink.click();
 
             WebElement nodeToDoubleClick2 = wait.until(ExpectedConditions.elementToBeClickable(
-                    By.xpath("//div[contains(@class,'node-content-wrapper') and .//span[normalize-space()='test_iheb']]")
+                    By.xpath("//div[contains(@class,'node-content-wrapper') and .//span[normalize-space()='test_iheb1']]")
             ));
 
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", nodeToDoubleClick2);
@@ -670,7 +671,7 @@ public class TestP02T002T022 {
             for (int i = 0; i < maxScrollAttempts; i++) {
                 try {
                     nodeToDoubleClick3 = driver.findElement(
-                            By.xpath("//div[contains(@class,'folderStyle') and .//span[@title='test_iheb']]")
+                            By.xpath("//div[contains(@class,'folderStyle') and .//span[@title='test_iheb1']]")
                     );
                     if (nodeToDoubleClick3.isDisplayed()) {
                         break; // Found it!
@@ -685,7 +686,7 @@ public class TestP02T002T022 {
             }
 
             if (nodeToDoubleClick3 == null) {
-                throw new RuntimeException("Could not find folder node titled 'test_iheb' after scrolling.");
+                throw new RuntimeException("Could not find folder node titled 'test_iheb1' after scrolling.");
             }
 
             // Scroll into center and double-click
